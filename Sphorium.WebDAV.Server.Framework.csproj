@@ -247,7 +247,6 @@
     <EmbeddedResource Include="FrameworkResources.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="History.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

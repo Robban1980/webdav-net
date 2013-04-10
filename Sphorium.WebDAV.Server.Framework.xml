@@ -4,52 +4,83 @@
         <name>Sphorium.WebDAV.Server.Framework</name>
     </assembly>
     <members>
-        <member name="T:Sphorium.WebDAV.Server.Framework.WebDavProcessor">
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection">
             <summary>
-            WebDav Framework entry point for Dav request processing
+            WebDav Property Collection.
             </summary>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.WebDavProcessor.__davMethodList">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.#ctor">
             <summary>
-            Keeps track of all the inherited DavOptionsBase members
+            WebDav Property Collection.
             </summary>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.#ctor">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Remove(System.String)">
             <summary>
-            Initializes a new instance of the WebDavProcessor class
+            Removes a property from the collection by name
+            </summary>
+            <param name="propertyName"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.GetPropertyNames">
+            <summary>
+            Retrieve all the available collection property names
             </summary>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.#ctor(System.Reflection.Assembly)">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Copy(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
             <summary>
-            Initializes a new instance of the WebDavProcessor class
+            Copy an existing property collection
             </summary>
-            <param name="davSourceAssembly">Assembly containing custom DAV Method implementation </param>
+            <param name="propertyCollection"></param>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.ProcessRequest(System.Web.HttpApplication)">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Clone">
             <summary>
-            WebDav Framework method for Dav request processing
+            DavPropertyAttribute Clone
             </summary>
-            <param name="httpApplication"></param>
-            <remarks>
-            	Process all requests... will return 501 if the requested method is not implemented
-            </remarks>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
         </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.WebDavProcessor.DebugFilePath">
+        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Item(System.String)">
             <summary>
-            Request / Response Debug File Path
+            Retrieve a property by name
             </summary>
         </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.WebDavProcessor.DavSourceAssembly">
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection">
             <summary>
-            Dav Source Assembly
+            WebDav Lock Property Collection.
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyMoveBase">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection.#ctor">
             <summary>
-            Dav Resource Common Copy/Move Framework Base Class
+            WebDav Lock Property Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection.Clone">
+            <summary>
+            DavLockPropertyCollection Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase">
+            <summary>
+            Dav Resource Get Framework Base Class
             </summary>
             <remarks>
             	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#rfc.section.8.4
+            		
+            	- If the requested resource does not exist the method MUST fail with:
+            		
+            				base.AbortRequest(ServerResponseCode.NotFound)
+            	</code>
+            	
+            	<code>
+            		Returns DavGetResponseCode.Created when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
             </remarks>	
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase">
@@ -266,6 +297,325 @@
             501: Method Not Implemented
             </summary>
         </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.#ctor">
+            <summary>
+            Dav Resource Get Framework Base Class
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ContentType">
+            <summary>
+            Output response content type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseCache">
+            <summary>
+            Output response cacheability.
+            </summary>
+            <remarks>HttpCacheability.NoCache by default</remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseCacheExpiration">
+            <summary>
+            Output response cache expiration
+            </summary>
+            <remarks>No expiration by default</remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseOutput">
+            <summary>
+            Resource output response
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode">
+            <summary>
+            WebDav GET Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode.None">
+            <summary>
+            0: None
+            </summary>
+            <remarks>
+            	Default enumerator value
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode.Created">
+            <summary>
+            201: Created
+            </summary>
+            <remarks>
+            	The resource was sent 
+            </remarks>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavResourceCollection">
+            <summary>
+            WebDav Resource Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceCollection.#ctor">
+            <summary>
+            WebDav Lock Property Collection.
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs">
+            <summary>
+            WebDav Lock Refresh event arguments
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.#ctor(System.String,System.Int32)">
+            <summary>
+            WebDav Lock Refresh event arguments
+            </summary>
+            <param name="lockToken"></param>
+            <param name="lockTimeout"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.Clone">
+            <summary>
+            DavRefreshEventArgs Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.LockToken">
+            <summary>
+            Argument Lock Token
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.LockTimeout">
+            <summary>
+            Argument Lock Timeout
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavVersionControlBase">
+            <summary>
+            Dav Version Control Framework Base Class
+            </summary>
+            <remarks>
+            	RFC3253 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC3253
+            		http://www.webdav.org/specs/rfc3253.html#METHOD_VERSION-CONTROL
+            		
+            	-	If a request body is included, it MUST be a DAV:version-control XML element.
+            	
+            	- If a response body for a successful request is included, it MUST be a 
+            		DAV:version-control-response XML element.
+            	
+            	NOTE: There is no way to undo a VERSION-CONTROL command.
+            	</code>
+            	
+            	<code>
+            		Returns ServerResponseCode.Ok when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavVersionControlBase.#ctor">
+            <summary>
+            Dav Version Control Framework Base Class
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection">
+            <summary>
+            WebDav Property Attribute Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.#ctor">
+            <summary>
+            WebDav Property Attribute Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.GetAllPropertyAttributeNames">
+            <summary>
+            Retrieve all the available collection property attributenames
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.Clone">
+            <summary>
+            DavPropertyAttributeCollection Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.Item(System.String)">
+            <summary>
+            Retrieve a property attribute by name
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty">
+            <summary>
+            WebDav Lock Property.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.#ctor">
+            <summary>
+            WebDav Lock Property.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.IsReadOnly">
+            <summary>
+            Check to see if this object is read only
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.IsReadOnly(System.Boolean)">
+            <summary>
+            Check to see if this object is read only
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.GetLockTokens">
+            <summary>
+            Lock token
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ClearLockTokens">
+            <summary>
+            Clear the current lock tokens
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.AddLockToken(System.String)">
+            <summary>
+            Add a new lock token 
+            </summary>
+            <param name="opaqueLockToken"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.Copy(Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty)">
+            <summary>
+            Copies an existing LockProperty
+            </summary>
+            <param name="lockProperty"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.Clone">
+            <summary>
+            DavLockProperty Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockType">
+            <summary>
+            WebDav Lock Type.
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockScope">
+            <summary>
+            WebDav Lock Scope
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockDepth">
+            <summary>
+            Lock depth
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockOwner">
+            <summary>
+            Lock owner
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockOwnerType">
+            <summary>
+            Lock owner type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockTimeout">
+            <summary>
+            Lock timeout in seconds
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ReadOnly">
+            <summary>
+            Toggles the write capabilities on this object
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ActiveLock">
+            <summary>
+            Obtain the Xml representation of the lock information
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase">
+            <summary>
+            Dav Head Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#rfc.section.8.4
+            		
+            	- If the requested resource does not exist the method MUST fail with:
+            		
+            				base.AbortRequest(ServerResponseCode.NotFound)
+            	</code>
+            	
+            	<code>
+            		Returns ServerResponseCode.OK when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>		
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.#ctor">
+            <summary>
+            Dav Head Framework Base Class
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.Resource">
+            <summary>
+            Head Resource
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.ResponseCache">
+            <summary>
+            Output response cacheability.
+            </summary>
+            <remarks>HttpCacheability.NoCache by default</remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.ResponseCacheExpiration">
+            <summary>
+            Output response cache expiration
+            </summary>
+            <remarks>No expiration by default</remarks>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase">
+            <summary>
+            Dav Resource Copy Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_COPY
+            		
+            	- When the COPY method has completed processing it MUST have created a consistent namespace 
+            		at the destination. However, if an error occurs while copying an internal collection, 
+            		the server MUST NOT copy any resources identified by members of this collection 
+            		(i.e., the server must skip this subtree)
+            		
+            			For example, if resource /a/b/c/d.html is to be created and /a/b/c/ does not exist
+            			
+            		MUST fail with:
+            		
+            				base.AbortRequest(DavCopyResponseCode.Conflict)
+            	</code>
+            	
+            	<code>
+            		Returns DavCopyResponseCode.Created or DavCopyResponseCode.NoContent when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>	
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyMoveBase">
+            <summary>
+            Dav Resource Common Copy/Move Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            </remarks>	
+        </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.Interfaces.IDavRequestProcessError">
             <summary>
             Summary description for IDavRequestProcessError.
@@ -379,6 +729,95 @@
             </summary>
             <remarks>
             	The source resource was successfully copied to a pre-existing destination resource.
+            </remarks>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.#ctor">
+            <summary>
+            Dav Resource Copy Framework Base Class
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode">
+            <summary>
+            WebDav COPY Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.None">
+            <summary>
+            0: None
+            </summary>
+            <remarks>
+            	Default enumerator value
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Created">
+            <summary>
+            201: Created
+            </summary>
+            <remarks>
+            	The source resource was successfully copied. 
+            	The copy operation resulted in the creation of a new resource.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.NoContent">
+            <summary>
+            204: No Content
+            </summary>
+            <remarks>
+            	The source resource was successfully copied to a pre-existing destination resource.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Forbidden">
+            <summary>
+            403: Forbidden
+            </summary>
+            <remarks>
+            	The source and destination URIs are the same
+            </remarks>
+            
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Conflict">
+            <summary>
+            409: Conflict
+            </summary>
+            <remarks>
+            	A resource cannot be created at the destination until one or more intermediate 
+            	collections have been created.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.PreconditionFailed">
+            <summary>
+            412: Precondition Failed
+            </summary>
+            <remarks>
+            	The server was unable to maintain the liveness of the properties listed in the 
+            	propertybehavior XML element or the Overwrite header is "F" and the state of 
+            	the destination resource is non-null.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Locked">
+            <summary>
+            423: Locked
+            </summary>
+            <remarks>
+            	The destination resource was locked.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.BadGateway">
+            <summary>
+            502: Bad Gateway
+            </summary>
+            <remarks>
+            	This may occur when the destination is on another server 
+            	and the destination server refuses to accept the resource.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.InsufficientStorage">
+            <summary>
+            507: Insufficient Storage
+            </summary>
+            <remarks>
+            	The destination resource does not have sufficient space to record 
+            	the state of the resource after the execution of this method.
             </remarks>
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.InternalFunctions">
@@ -501,1081 +940,6 @@
             <param name="appPath"></param>
             <param name="url"></param>
             <returns></returns>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase">
-            <summary>
-            Dav Resource Put Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_PUT
-            		
-            	- A PUT that would result in the creation of a resource without an appropriately 
-            		scoped parent collection
-            		
-            			For example, if resource /a/b/c/d.html is to be created and /a/b/c/ does not exist
-            			
-            		MUST fail with:
-            		
-            				base.AbortRequest(DavPutResponseCode.Conflict)
-            	</code>
-            	
-            	<code>
-            		Returns DavPutResponseCode.Created when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>		
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.#ctor">
-            <summary>
-            Dav Resource Put Framework Base Class
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.GetRequestInput">
-            <summary>
-            Request input 
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.ContentType">
-            <summary>
-            Request content type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.OverwriteExistingResource">
-            <summary>
-            Check to see if an existing resource should be overwritten
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode">
-            <summary>
-            WebDav PUT Response Codes
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.None">
-            <summary>
-            0: None
-            </summary>
-            <remarks>
-            	Default enumerator value
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Created">
-            <summary>
-            201: Created
-            </summary>
-            <remarks>
-            	Resource completed successfully
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Forbidden">
-            <summary>
-            403: Forbidden
-            </summary>
-            <remarks>
-            	This indicates one of two conditions: 
-            		- The server does not allow the creation of the resource at the given 
-            			location in its namespace
-            		- The parent collection of the Request-URI exists but cannot accept members.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Conflict">
-            <summary>
-            409: Conflict
-            </summary>
-            <remarks>
-            	If all ancestor collections do not exist
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Locked">
-            <summary>
-            423: Resource Locked
-            </summary>
-            <remarks>
-            	If the resource is already locked with an exclusive lock or if the resource
-            	is already locked with a shared lock and the client requests and exclusive lock
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.InsufficientStorage">
-            <remarks>
-            	The resource does not have sufficient space to record the state of the 
-            	resource after the execution of this method.
-            </remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection">
-            <summary>
-            WebDav Resource Version Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection.#ctor">
-            <summary>
-            WebDav Lock Property Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection.Clone">
-            <summary>
-            DavResourceVersionCollection Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase">
-            <summary>
-            Dav Resource Unlock Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_UNLOCK
-            		
-            	- The UNLOCK method removes the lock identified by the lock token in the Lock-Token 
-            	request header from the Request-URI, and all other resources included in the lock. 
-            	If all resources which have been locked under the submitted lock token can not be 
-            	unlocked then the UNLOCK request MUST fail.
-            	</code>
-            	
-            	<code>
-            		Returns DavUnlockResponseCode.NoContent when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.#ctor">
-            <summary>
-            Dav Resource Unlock Framework Base Class
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.LockToken">
-            <summary>
-            Lock Token
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode">
-            <summary>
-            WebDav UNLOCK Response Codes
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.None">
-            <summary>
-            0: None
-            </summary>
-            <remarks>
-            	Default enumerator value
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.NoContent">
-            <summary>
-            204: NoContent
-            </summary>
-            <remarks>The unlock command completed successfully</remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.BadRequest">
-            <summary>
-            400: Bad Request
-            </summary>
-            <example>If the client does not provide a lock token</example>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.Unauthorized">
-            <summary>
-            401: Unauthorized
-            </summary>
-            <example>If the client is not authorized to unlock the resource</example>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.PreconditionFailed">
-            <summary>
-            412: Precondition Failed
-            </summary>
-            <example>
-            	If the client provides a lock token to unlock a resource that isn't locked or
-            	provides an incorrect lock token
-            </example>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty">
-            <summary>
-            WebDav Lock Property.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.#ctor">
-            <summary>
-            WebDav Lock Property.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.IsReadOnly">
-            <summary>
-            Check to see if this object is read only
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.IsReadOnly(System.Boolean)">
-            <summary>
-            Check to see if this object is read only
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.GetLockTokens">
-            <summary>
-            Lock token
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ClearLockTokens">
-            <summary>
-            Clear the current lock tokens
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.AddLockToken(System.String)">
-            <summary>
-            Add a new lock token 
-            </summary>
-            <param name="opaqueLockToken"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.Copy(Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty)">
-            <summary>
-            Copies an existing LockProperty
-            </summary>
-            <param name="lockProperty"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.Clone">
-            <summary>
-            DavLockProperty Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockType">
-            <summary>
-            WebDav Lock Type.
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockScope">
-            <summary>
-            WebDav Lock Scope
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockDepth">
-            <summary>
-            Lock depth
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockOwner">
-            <summary>
-            Lock owner
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockOwnerType">
-            <summary>
-            Lock owner type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.LockTimeout">
-            <summary>
-            Lock timeout in seconds
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ReadOnly">
-            <summary>
-            Toggles the write capabilities on this object
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavLockProperty.ActiveLock">
-            <summary>
-            Obtain the Xml representation of the lock information
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase">
-            <summary>
-            Summary description for DavResource.
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.__classProperties">
-            <summary>
-            Keeps track of internal parameters
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.#ctor(System.String,System.String)">
-            <summary>
-            Dav Resource Framework Base Class
-            </summary>
-            <param name="displayName">Resource display name</param>
-            <param name="resourcePath">Resource path</param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.GetPropertyValues(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
-            <summary>
-            Retrieve resource property values
-            </summary>
-            <param name="requestedProperties"></param>
-            <param name="validProperties"></param>
-            <param name="invalidProperties"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceProperties">
-            <summary>
-            Returns a list of all available property names
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.CustomProperties">
-            <summary>
-            Resource custom properties
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportsExclusiveLock">
-            <summary>
-            Property detailing if the resource supports exclusive locking
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportsSharedLock">
-            <summary>
-            Property detailing if the resource supports shared locking
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ActiveLocks">
-            <summary>
-            Active Locks
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceVersions">
-            <summary>
-            Active Locks
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.LockDiscovery">
-            <summary>
-            XmlNode detailing current resource locks
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportedLock">
-            <summary>
-            Supported Lock information
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.DisplayName">
-            <summary>
-            Dav Resource display name
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentLanguage">
-            <summary>
-            Dav Resource display name
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentLength">
-            <summary>
-            Dav Resource content length
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceType">
-            <summary>
-            Resource Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourcePath">
-            <summary>
-            Resource Path
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentType">
-            <summary>
-            Resource Content Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.LastModified">
-            <summary>
-            Dav Resource last modified datetime
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.CreationDate">
-            <summary>
-            Dav Resource created DateTime
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.Boolean)">
-            <summary>
-            Resource Attribute
-            </summary>
-            <param name="enableAutoDiscovery">
-            	Specify if this property should be included when using reflection
-            </param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.String)">
-            <summary>
-            Resource Attribute
-            </summary>
-            <param name="xmlPropName"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.Boolean,System.String)">
-            <summary>
-            Resource Attribute
-            </summary>
-            <param name="enableAutoDiscovery"></param>
-            <param name="xmlPropName"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.EnableAutoDiscovery">
-            <summary>
-            Enable Auto Discovery
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.XmlPropName">
-            <summary>
-            XML property name
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase">
-            <summary>
-            Dav Head Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#rfc.section.8.4
-            		
-            	- If the requested resource does not exist the method MUST fail with:
-            		
-            				base.AbortRequest(ServerResponseCode.NotFound)
-            	</code>
-            	
-            	<code>
-            		Returns ServerResponseCode.OK when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>		
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.#ctor">
-            <summary>
-            Dav Head Framework Base Class
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.Resource">
-            <summary>
-            Head Resource
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.ResponseCache">
-            <summary>
-            Output response cacheability.
-            </summary>
-            <remarks>HttpCacheability.NoCache by default</remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavHeadBase.ResponseCacheExpiration">
-            <summary>
-            Output response cache expiration
-            </summary>
-            <remarks>No expiration by default</remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase">
-            <summary>
-            Dav Resource Copy Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_COPY
-            		
-            	- When the COPY method has completed processing it MUST have created a consistent namespace 
-            		at the destination. However, if an error occurs while copying an internal collection, 
-            		the server MUST NOT copy any resources identified by members of this collection 
-            		(i.e., the server must skip this subtree)
-            		
-            			For example, if resource /a/b/c/d.html is to be created and /a/b/c/ does not exist
-            			
-            		MUST fail with:
-            		
-            				base.AbortRequest(DavCopyResponseCode.Conflict)
-            	</code>
-            	
-            	<code>
-            		Returns DavCopyResponseCode.Created or DavCopyResponseCode.NoContent when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>	
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.#ctor">
-            <summary>
-            Dav Resource Copy Framework Base Class
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode">
-            <summary>
-            WebDav COPY Response Codes
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.None">
-            <summary>
-            0: None
-            </summary>
-            <remarks>
-            	Default enumerator value
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Created">
-            <summary>
-            201: Created
-            </summary>
-            <remarks>
-            	The source resource was successfully copied. 
-            	The copy operation resulted in the creation of a new resource.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.NoContent">
-            <summary>
-            204: No Content
-            </summary>
-            <remarks>
-            	The source resource was successfully copied to a pre-existing destination resource.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Forbidden">
-            <summary>
-            403: Forbidden
-            </summary>
-            <remarks>
-            	The source and destination URIs are the same
-            </remarks>
-            
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Conflict">
-            <summary>
-            409: Conflict
-            </summary>
-            <remarks>
-            	A resource cannot be created at the destination until one or more intermediate 
-            	collections have been created.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.PreconditionFailed">
-            <summary>
-            412: Precondition Failed
-            </summary>
-            <remarks>
-            	The server was unable to maintain the liveness of the properties listed in the 
-            	propertybehavior XML element or the Overwrite header is "F" and the state of 
-            	the destination resource is non-null.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.Locked">
-            <summary>
-            423: Locked
-            </summary>
-            <remarks>
-            	The destination resource was locked.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.BadGateway">
-            <summary>
-            502: Bad Gateway
-            </summary>
-            <remarks>
-            	This may occur when the destination is on another server 
-            	and the destination server refuses to accept the resource.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavCopyBase.DavCopyResponseCode.InsufficientStorage">
-            <summary>
-            507: Insufficient Storage
-            </summary>
-            <remarks>
-            	The destination resource does not have sufficient space to record 
-            	the state of the resource after the execution of this method.
-            </remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Resources.DavFile">
-            <summary>
-            Dav File Resource Framework Base Class
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Resources.DavFile.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the DavFile class
-            </summary>
-            <param name="displayName">Resource display name</param>
-            <param name="filePath">Resource path</param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.ContentType">
-            <summary>
-            Dav File Content Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.ResourceType">
-            <summary>
-            Dav File Resource Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.FilePath">
-            <summary>
-            Gets the DavFile Path
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection">
-            <summary>
-            WebDav Lock Property Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection.#ctor">
-            <summary>
-            WebDav Lock Property Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavLockPropertyCollection.Clone">
-            <summary>
-            DavLockPropertyCollection Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection">
-            <summary>
-            WebDav Property Attribute Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.#ctor">
-            <summary>
-            WebDav Property Attribute Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.GetAllPropertyAttributeNames">
-            <summary>
-            Retrieve all the available collection property attributenames
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.Clone">
-            <summary>
-            DavPropertyAttributeCollection Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyAttributeCollection.Item(System.String)">
-            <summary>
-            Retrieve a property attribute by name
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase">
-            <summary>
-            Dav Resource Delete Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_DELETE
-            	</code>
-            	
-            	<code>
-            		Returns DavDeleteResponseCode.NoContent when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>	
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.#ctor">
-            <summary>
-            Dav Resource Delete Framework Base Class
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteBase_ValidateDavRequest(System.Object,System.EventArgs)">
-            <summary>
-            Ensure the Dav request is valid
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ClearProcessErrors">
-            <summary>
-            Clear the current processing errors
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.AddProcessErrorResource(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Enum)">
-            <summary>
-            Add a resource to the error list
-            </summary>
-            <param name="resource"></param>
-            <param name="errorCode"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ProcessErrors">
-            <summary>
-            Processing errors 
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ProcessErrorResources">
-            <summary>
-            Retrieve all the process errors
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode">
-            <summary>
-            WebDav DELETE Response Codes
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.None">
-            <summary>
-            0: None
-            </summary>
-            <remarks>
-            	Default enumerator value
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.Processing">
-            <summary>
-            102: Processing
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.NoContent">
-            <summary>
-            204: NoContent
-            </summary>
-            <remarks>
-            	The delete command completed successfully
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.Locked">
-            <summary>
-            423: Locked
-            </summary>
-            <remarks>
-            	The resource is locked
-            </remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs">
-            <summary>
-            WebDav Module Process Request event arguments
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.#ctor(System.Uri,System.Boolean)">
-            <summary>
-            WebDav Module Process Request event arguments
-            </summary>
-            <param name="requestUri"></param>
-            <param name="processRequest"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.RequestUri">
-            <summary>
-            Request Uri
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.ProcessRequest">
-            <summary>
-            Argument Lock Timeout
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase">
-            <summary>
-            Dav Resource PROPFIND Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_PROPFIND
-            	</code>
-            	
-            	<code>
-            		Returns ServerResponseCode.MultiStatus when successful
-            	</code>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>	
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase">
-            <summary>
-            Dav Resource Find Framework Base Class
-            </summary>
-            <remarks>
-            	Used by DAVPropFindBase and DAVReportBase
-            </remarks>	
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.#ctor">
-            <summary>
-            Dav Resource Find Framework Base Class
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AddResource(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase)">
-            <summary>
-            Add a resource
-            </summary>
-            <param name="resource"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.LoadNodePropertyNames">
-            <summary>
-            Load the available property names
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendResourceNodeProperties(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Xml.XmlTextWriter)">
-            <summary>
-            Append a resource's properties to the xml text writer
-            </summary>
-            <param name="davResource"></param>
-            <param name="xmlWriter"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.LoadNodes(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
-            <summary>
-            Load the requested properties
-            </summary>
-            <param name="properties">Requested properties or null for all properties</param>
-            <returns></returns>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendResourceNode(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,System.Xml.XmlTextWriter)">
-            <summary>
-            Append a resource to the xml text writer
-            </summary>
-            <param name="davResource"></param>
-            <param name="requestedProperties"></param>
-            <param name="xmlWriter"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendInvalidResourceNode(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,System.Xml.XmlTextWriter)">
-            <summary>
-            Append a resource to the xml text writer
-            </summary>
-            <param name="davResource"></param>
-            <param name="requestedProperties"></param>
-            <param name="xmlWriter"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.ResourceCount">
-            <summary>
-            Resource count
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.CollectionResources">
-            <summary>
-            Retrieve the current collection resources
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.FileResources">
-            <summary>
-            Retrieve the current file resources
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.MissingResources">
-            <summary>
-            Retrieve the current missing resources
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.RequestProperties">
-            <summary>
-            Requested properties
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.#ctor">
-            <summary>
-            Dav Resource PROPFIND Framework Base Class
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.RequestPropertyType">
-            <summary>
-            Requested Property type
-            <seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType"/>
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType">
-            <summary>
-            Property request types
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.None">
-            <summary>
-            No properties requested
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.NamedProperties">
-            <summary>
-            Specific properties requested
-            <seealso cref="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.RequestProperties"/>
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.PropertyNames">
-            <summary>
-            A summary of all the available properties
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.AllProperties">
-            <summary>
-            All properties requested
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Resources.DavFolder">
-            <summary>
-            Dav Folder Resource Framework Base Class
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.#ctor(System.String,System.String)">
-            <summary>
-            Initializes a new instance of the DavFolder class
-            </summary>
-            <param name="displayName">Resource display name</param>
-            <param name="folderPath">Resource path</param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.ContentType">
-            <summary>
-            Dav Folder Content Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.ResourceType">
-            <summary>
-            Dav Resource Type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsCollection">
-            <summary>
-            Gets the collection type
-            </summary>
-            <remarks>Will always return 1</remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsHidden">
-            <summary>
-            Gets or sets the IsHidden
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsFolder">
-            <summary>
-            Gets the IsFolder property
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.FolderPath">
-            <summary>
-            Gets DavFolder Path
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavProperty">
-            <summary>
-            WebDav Property.
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase">
-            <summary>
-            WebDav Property Base Class.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.#ctor">
-            <summary>
-            WebDav Property Base Class.
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Name">
-            <summary>
-            Name
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Namespace">
-            <summary>
-            Namespace
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Value">
-            <summary>
-            Value
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor">
-            <summary>
-            WebDav Property.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.Xml.XPath.XPathNavigator)">
-            <summary>
-            WebDav Property.
-            </summary>
-            <param name="property"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.String,System.String,System.String)">
-            <summary>
-            WebDav Property.
-            </summary>
-            <param name="propertyName"></param>
-            <param name="propertyValue"></param>
-            <param name="propertyNamespace"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.String,System.String)">
-            <summary>
-            WebDav Property
-            </summary>
-            <param name="propertyName"></param>
-            <param name="propertyNamespace"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.Clone">
-            <summary>
-            DavProperty Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.NestedProperties">
-            <summary>
-            Nested Dav Properties
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.Attributes">
-            <summary>
-            Nested Dav Properties
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase">
-            <summary>
-            Dav Version Report Framework Base Class
-            </summary>
-            <remarks>
-            	RFC3253 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC3253
-            		http://www.webdav.org/specs/rfc3253.html#METHOD_REPORT
-            	
-            	
-            	//TODO: update this	
-            	-	If a request body is included, it MUST be a DAV:version-control XML element.
-            	
-            	- If a response body for a successful request is included, it MUST be a 
-            		DAV:version-control-response XML element.
-            	
-            	NOTE: There is no way to undo a VERSION-CONTROL command.
-            	</code>
-            	
-            	<code>
-            		Returns ServerResponseCode.Ok when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.#ctor">
-            <summary>
-            Dav Version Control Framework Base Class
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.RequestVersionReportType">
-            <summary>
-            Requested Version report type
-            <seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType"/>
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType">
-            <summary>
-            Property request types
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.None">
-            <summary>
-            No report requested
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.VersionTree">
-            <summary>
-            Specific properties requested
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.ExpandProperty">
-            <summary>
-            A summary of all the available properties
-            </summary>
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavPropertyAttribute">
             <summary>
@@ -1726,6 +1090,860 @@
             <remarks>
             	The server did not have sufficient space to record the property
             </remarks>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection">
+            <summary>
+            WebDav Resource Version Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection.#ctor">
+            <summary>
+            WebDav Lock Property Collection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceVersionCollection.Clone">
+            <summary>
+            DavResourceVersionCollection Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion">
+            <summary>
+            WebDav Lock Property.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.#ctor">
+            <summary>
+            WebDav Resource Version
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.Clone">
+            <summary>
+            DavResourceVersion Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.Comment">
+            <summary>
+            Resource comment
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs">
+            <summary>
+            WebDav Module Process Request event arguments
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.#ctor(System.Uri,System.Boolean)">
+            <summary>
+            WebDav Module Process Request event arguments
+            </summary>
+            <param name="requestUri"></param>
+            <param name="processRequest"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.RequestUri">
+            <summary>
+            Request Uri
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavModuleProcessRequestArgs.ProcessRequest">
+            <summary>
+            Argument Lock Timeout
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs">
+            <summary>
+            Basic Authorization event arguments
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Basic Authorization event arguments
+            </summary>
+            <param name="userName"></param>
+            <param name="password"></param>
+            <param name="realm"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.UserName">
+            <summary>
+            User Name
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Password">
+            <summary>
+            Password
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Realm">
+            <summary>
+            Realm
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Authorized">
+            <summary>
+            Authorized 
+            </summary>
+            <value>
+            TRUE if the request is authorized
+            </value>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase">
+            <summary>
+            Dav Resource Put Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_PUT
+            		
+            	- A PUT that would result in the creation of a resource without an appropriately 
+            		scoped parent collection
+            		
+            			For example, if resource /a/b/c/d.html is to be created and /a/b/c/ does not exist
+            			
+            		MUST fail with:
+            		
+            				base.AbortRequest(DavPutResponseCode.Conflict)
+            	</code>
+            	
+            	<code>
+            		Returns DavPutResponseCode.Created when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>		
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.#ctor">
+            <summary>
+            Dav Resource Put Framework Base Class
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.GetRequestInput">
+            <summary>
+            Request input 
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.ContentType">
+            <summary>
+            Request content type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.OverwriteExistingResource">
+            <summary>
+            Check to see if an existing resource should be overwritten
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode">
+            <summary>
+            WebDav PUT Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.None">
+            <summary>
+            0: None
+            </summary>
+            <remarks>
+            	Default enumerator value
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Created">
+            <summary>
+            201: Created
+            </summary>
+            <remarks>
+            	Resource completed successfully
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Forbidden">
+            <summary>
+            403: Forbidden
+            </summary>
+            <remarks>
+            	This indicates one of two conditions: 
+            		- The server does not allow the creation of the resource at the given 
+            			location in its namespace
+            		- The parent collection of the Request-URI exists but cannot accept members.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Conflict">
+            <summary>
+            409: Conflict
+            </summary>
+            <remarks>
+            	If all ancestor collections do not exist
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.Locked">
+            <summary>
+            423: Resource Locked
+            </summary>
+            <remarks>
+            	If the resource is already locked with an exclusive lock or if the resource
+            	is already locked with a shared lock and the client requests and exclusive lock
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPutBase.DavPutResponseCode.InsufficientStorage">
+            <remarks>
+            	The resource does not have sufficient space to record the state of the 
+            	resource after the execution of this method.
+            </remarks>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.WebDavException">
+            <summary>
+            WebDav Server Framework Exception.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor">
+            <summary>
+            WebDav Server Framework Exception.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.String)">
+            <summary>
+            WebDav Server Framework Exception.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.String,System.Exception)">
+            <summary>
+            WebDav Server Framework Exception.
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            WebDav Server Framework Exception.
+            </summary>
+            <param name="info"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs">
+            <summary>
+            Digest Authorization event arguments
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.#ctor(System.String,System.String)">
+            <summary>
+            Digest Authorization event arguments
+            </summary>
+            <param name="userName"></param>
+            <param name="realm"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.UserName">
+            <summary>
+            User Name
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Password">
+            <summary>
+            Password
+            </summary>
+            <remarks>
+            Required for digest authorization
+            </remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Nonce">
+            <summary>
+            Nonce
+            </summary>
+            <remarks>
+            Update to apply a custom nonce
+            </remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.StaleNonce">
+            <summary>
+            Nonce Is Stale
+            </summary>
+            <remarks>
+            Update to require a new nonce
+            </remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Realm">
+            <summary>
+            Realm
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs">
+            <summary>
+            Authentication event arguments
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.#ctor(Sphorium.WebDAV.Server.Framework.Security.AuthenticationArgs)">
+            <summary>
+            Authorization event arguments
+            </summary>
+            <param name="authArgs"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.AuthenticationInfo">
+            <summary>
+            Authentication Info
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.UserName">
+            <summary>
+            UserName
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.RequestAuthorized">
+            <summary>
+            Request Authorization
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Resources.DavFile">
+            <summary>
+            Dav File Resource Framework Base Class
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase">
+            <summary>
+            Summary description for DavResource.
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.__classProperties">
+            <summary>
+            Keeps track of internal parameters
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.#ctor(System.String,System.String)">
+            <summary>
+            Dav Resource Framework Base Class
+            </summary>
+            <param name="displayName">Resource display name</param>
+            <param name="resourcePath">Resource path</param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.GetPropertyValues(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
+            <summary>
+            Retrieve resource property values
+            </summary>
+            <param name="requestedProperties"></param>
+            <param name="validProperties"></param>
+            <param name="invalidProperties"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceProperties">
+            <summary>
+            Returns a list of all available property names
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.CustomProperties">
+            <summary>
+            Resource custom properties
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportsExclusiveLock">
+            <summary>
+            Property detailing if the resource supports exclusive locking
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportsSharedLock">
+            <summary>
+            Property detailing if the resource supports shared locking
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ActiveLocks">
+            <summary>
+            Active Locks
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceVersions">
+            <summary>
+            Active Locks
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.LockDiscovery">
+            <summary>
+            XmlNode detailing current resource locks
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.SupportedLock">
+            <summary>
+            Supported Lock information
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.DisplayName">
+            <summary>
+            Dav Resource display name
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentLanguage">
+            <summary>
+            Dav Resource display name
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentLength">
+            <summary>
+            Dav Resource content length
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourceType">
+            <summary>
+            Resource Type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ResourcePath">
+            <summary>
+            Resource Path
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.ContentType">
+            <summary>
+            Resource Content Type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.LastModified">
+            <summary>
+            Dav Resource last modified datetime
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase.CreationDate">
+            <summary>
+            Dav Resource created DateTime
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Resources.DavFile.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the DavFile class
+            </summary>
+            <param name="displayName">Resource display name</param>
+            <param name="filePath">Resource path</param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.ContentType">
+            <summary>
+            Dav File Content Type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.ResourceType">
+            <summary>
+            Dav File Resource Type
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFile.FilePath">
+            <summary>
+            Gets the DavFile Path
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.Boolean)">
+            <summary>
+            Resource Attribute
+            </summary>
+            <param name="enableAutoDiscovery">
+            	Specify if this property should be included when using reflection
+            </param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.String)">
+            <summary>
+            Resource Attribute
+            </summary>
+            <param name="xmlPropName"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.#ctor(System.Boolean,System.String)">
+            <summary>
+            Resource Attribute
+            </summary>
+            <param name="enableAutoDiscovery"></param>
+            <param name="xmlPropName"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.EnableAutoDiscovery">
+            <summary>
+            Enable Auto Discovery
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.ResourcePropertyAttribute.XmlPropName">
+            <summary>
+            XML property name
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase">
+            <summary>
+            Dav Resource Unlock Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_UNLOCK
+            		
+            	- The UNLOCK method removes the lock identified by the lock token in the Lock-Token 
+            	request header from the Request-URI, and all other resources included in the lock. 
+            	If all resources which have been locked under the submitted lock token can not be 
+            	unlocked then the UNLOCK request MUST fail.
+            	</code>
+            	
+            	<code>
+            		Returns DavUnlockResponseCode.NoContent when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.#ctor">
+            <summary>
+            Dav Resource Unlock Framework Base Class
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.LockToken">
+            <summary>
+            Lock Token
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode">
+            <summary>
+            WebDav UNLOCK Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.None">
+            <summary>
+            0: None
+            </summary>
+            <remarks>
+            	Default enumerator value
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.NoContent">
+            <summary>
+            204: NoContent
+            </summary>
+            <remarks>The unlock command completed successfully</remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.BadRequest">
+            <summary>
+            400: Bad Request
+            </summary>
+            <example>If the client does not provide a lock token</example>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.Unauthorized">
+            <summary>
+            401: Unauthorized
+            </summary>
+            <example>If the client is not authorized to unlock the resource</example>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavUnlockBase.DavUnlockResponseCode.PreconditionFailed">
+            <summary>
+            412: Precondition Failed
+            </summary>
+            <example>
+            	If the client provides a lock token to unlock a resource that isn't locked or
+            	provides an incorrect lock token
+            </example>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.WebDavProcessor">
+            <summary>
+            WebDav Framework entry point for Dav request processing
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.WebDavProcessor.__davMethodList">
+            <summary>
+            Keeps track of all the inherited DavOptionsBase members
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.#ctor">
+            <summary>
+            Initializes a new instance of the WebDavProcessor class
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.#ctor(System.Reflection.Assembly)">
+            <summary>
+            Initializes a new instance of the WebDavProcessor class
+            </summary>
+            <param name="davSourceAssembly">Assembly containing custom DAV Method implementation </param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavProcessor.ProcessRequest(System.Web.HttpApplication)">
+            <summary>
+            WebDav Framework method for Dav request processing
+            </summary>
+            <param name="httpApplication"></param>
+            <remarks>
+            	Process all requests... will return 501 if the requested method is not implemented
+            </remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.WebDavProcessor.DebugFilePath">
+            <summary>
+            Request / Response Debug File Path
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.WebDavProcessor.DavSourceAssembly">
+            <summary>
+            Dav Source Assembly
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Linq.IEnumerableExtensions">
+            <summary>
+            IEnumerable Extensions
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Linq.IEnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Performs the specified action on each element of the <![CDATA[IEnumerable<T>]]>.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="action">The <![CDATA[System.Action<T>]]> delegate to perform on each element of the <![CDATA[IEnumerable<T>]]>.</param>
+            <returns>source</returns>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase">
+            <summary>
+            Dav Resource Move Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_MOVE
+            		
+            	- When the MOVE method has completed processing it MUST have created a consistent namespace 
+            		at the destination. However, if an error occurs while moving an internal collection, 
+            		the server MUST NOT move any resources identified by members of the failed collection
+            		(i.e., the server must skip this subtree)
+            		
+            			For example, if an infinite depth move is performed on collection /a/, 
+            			which contains collections /a/b/ and /a/c/, and an error occurs moving /a/b/, an 
+            			attempt should still be made to try moving /a/c/. 
+            			
+            			Similarly, after encountering an error moving a non-collection resource as part 
+            			of an infinite depth move, the server SHOULD try to finish as much of the original 
+            			move operation as possible.
+            	</code>
+            	
+            	<code>
+            		Returns DavMoveResponseCode.Created or DavMoveResponseCode.NoContent when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>	
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.#ctor">
+            <summary>
+            Dav Resource Move Framework Base Class
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode">
+            <summary>
+            WebDav MOVE Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.None">
+            <summary>
+            0: None
+            </summary>
+            <remarks>
+            	Default enumerator value
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Created">
+            <summary>
+            201: Created
+            </summary>
+            <remarks>
+            	The source resource was successfully moved, and a new resource was created 
+            	at the destination.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.NoContent">
+            <summary>
+            204: No Content
+            </summary>
+            <remarks>
+            	The source resource was successfully moved to a pre-existing destination resource.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Forbidden">
+            <summary>
+            403: Forbidden
+            </summary>
+            <remarks>
+            	The source and destination URIs are the same
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Conflict">
+            <summary>
+            409: Conflict
+            </summary>
+            <remarks>
+            	A resource cannot be created at the destination until one or more intermediate 
+            	collections have been created
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.PreconditionFailed">
+            <summary>
+            412: Precondition Failed
+            </summary>
+            <remarks>
+            	The server was unable to maintain the liveness of the properties listed in 
+            	the propertybehavior XML element or the Overwrite header is "F" and the state 
+            	of the destination resource is non-null.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Locked">
+            <summary>
+            423: Locked
+            </summary>
+            <remarks>
+            	The source or the destination resource was locked.
+            </remarks>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.BadGateway">
+            <summary>
+            502: Bad Gateway
+            </summary>
+            <remarks>
+            	This may occur when the destination is on another server 
+            	and the destination server refuses to accept the resource.
+            </remarks>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection">
+            <summary>
+            Summary description for ProcessErrorCollection.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.Add(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Enum)">
+            <summary>
+            Add a resource
+            </summary>
+            <param name="resource"></param>
+            <param name="errorCode"></param>
+            <exception cref="T:Sphorium.WebDAV.Server.Framework.WebDavException">Throw exception if the errorCode value is not a valid Int32</exception>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.Item(System.Enum)">
+            <summary>
+            Retrieve all the resources with a particular errorCode
+            </summary>
+            <exception cref="T:Sphorium.WebDAV.Server.Framework.WebDavException">Throw exception if the errorCode value is not a valid Int32</exception>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.AllResourceErrors">
+            <summary>
+            Retrieve all the resource errors
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase">
+            <summary>
+            Dav Server OPTIONS Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant / RFC3253 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#dav.compliance.classes
+            		http://www.webdav.org/specs/rfc3253.html#rfc.section.3.9	
+            		
+            	Class 1:
+            		Class 1 compliant resources MUST return, at minimum, the value "1" in the Dav header 
+            		on all responses to the OPTIONS method.
+            	Class 2: 
+            		Class 2 compliant resources MUST meet all class 1 requirements and support the LOCK 
+            		method, the supportedlock property, the lockdiscovery property, the Time-Out response 
+            		header and the Lock-Token request header. A class "2" compliant resource SHOULD also 
+            		support the Time-Out request header and the owner XML element.
+            		
+            		Class 2 compliant resources MUST return, at minimum, the values "1" and "2" in the 
+            		Dav header on all responses to the OPTIONS method.
+            	</code>
+            	
+            	<code>
+            		Returns ServerResponseCode.OK when successful
+            	</code>
+            </remarks>	
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.#ctor">
+            <summary>
+            Dav Server OPTIONS Framework Base Class
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.SupportedHttpMethods">
+            <summary>
+            WebDav Server Supported Http Methods
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods">
+            <summary>
+            WebDav HttpMethods
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.None">
+            <summary>
+            No supported methods
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Options">
+            <summary>
+            Supports OPTIONS Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Get">
+            <summary>
+            Supports GET Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Head">
+            <summary>
+            Supports HEAD Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Delete">
+            <summary>
+            Supports DELETE Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Put">
+            <summary>
+            Supports PUT Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Copy">
+            <summary>
+            Supports COPY Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Move">
+            <summary>
+            Supports MOVE Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.MKCol">
+            <summary>
+            Supports MKCOL Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.PropFind">
+            <summary>
+            Supports PROPFIND Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.PropPatch">
+            <summary>
+            Supports PROPPATCH Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Lock">
+            <summary>
+            Supports LOCK Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Unlock">
+            <summary>
+            Supports UNLOCK Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.VersionControl">
+            <summary>
+            Supports VERSION-CONTROL Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Report">
+            <summary>
+            Supports REPORT Method
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.All">
+            <summary>
+            Supports All Methods
+            </summary>
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMKColBase">
             <summary>
@@ -1943,71 +2161,199 @@
             File Resource
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion">
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase">
             <summary>
-            WebDav Lock Property.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.#ctor">
-            <summary>
-            WebDav Resource Version
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.Clone">
-            <summary>
-            DavResourceVersion Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavResourceVersion.Comment">
-            <summary>
-            Resource comment
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase">
-            <summary>
-            Dav Resource Move Framework Base Class
+            Dav Resource PROPFIND Framework Base Class
             </summary>
             <remarks>
             	RFC2518 Compliant
             	
             	<code>
             	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#METHOD_MOVE
-            		
-            	- When the MOVE method has completed processing it MUST have created a consistent namespace 
-            		at the destination. However, if an error occurs while moving an internal collection, 
-            		the server MUST NOT move any resources identified by members of the failed collection
-            		(i.e., the server must skip this subtree)
-            		
-            			For example, if an infinite depth move is performed on collection /a/, 
-            			which contains collections /a/b/ and /a/c/, and an error occurs moving /a/b/, an 
-            			attempt should still be made to try moving /a/c/. 
-            			
-            			Similarly, after encountering an error moving a non-collection resource as part 
-            			of an infinite depth move, the server SHOULD try to finish as much of the original 
-            			move operation as possible.
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_PROPFIND
             	</code>
             	
             	<code>
-            		Returns DavMoveResponseCode.Created or DavMoveResponseCode.NoContent when successful
+            		Returns ServerResponseCode.MultiStatus when successful
             	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode"/>
             	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
             </remarks>	
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.#ctor">
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase">
             <summary>
-            Dav Resource Move Framework Base Class
+            Dav Resource Find Framework Base Class
+            </summary>
+            <remarks>
+            	Used by DAVPropFindBase and DAVReportBase
+            </remarks>	
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.#ctor">
+            <summary>
+            Dav Resource Find Framework Base Class
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode">
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AddResource(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase)">
             <summary>
-            WebDav MOVE Response Codes
+            Add a resource
+            </summary>
+            <param name="resource"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.LoadNodePropertyNames">
+            <summary>
+            Load the available property names
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendResourceNodeProperties(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Xml.XmlTextWriter)">
+            <summary>
+            Append a resource's properties to the xml text writer
+            </summary>
+            <param name="davResource"></param>
+            <param name="xmlWriter"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.LoadNodes(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
+            <summary>
+            Load the requested properties
+            </summary>
+            <param name="properties">Requested properties or null for all properties</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendResourceNode(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,System.Xml.XmlTextWriter)">
+            <summary>
+            Append a resource to the xml text writer
+            </summary>
+            <param name="davResource"></param>
+            <param name="requestedProperties"></param>
+            <param name="xmlWriter"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.AppendInvalidResourceNode(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection,System.Xml.XmlTextWriter)">
+            <summary>
+            Append a resource to the xml text writer
+            </summary>
+            <param name="davResource"></param>
+            <param name="requestedProperties"></param>
+            <param name="xmlWriter"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.ResourceCount">
+            <summary>
+            Resource count
             </summary>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.None">
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.CollectionResources">
+            <summary>
+            Retrieve the current collection resources
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.FileResources">
+            <summary>
+            Retrieve the current file resources
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.MissingResources">
+            <summary>
+            Retrieve the current missing resources
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.RequestProperties">
+            <summary>
+            Requested properties
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.#ctor">
+            <summary>
+            Dav Resource PROPFIND Framework Base Class
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.RequestPropertyType">
+            <summary>
+            Requested Property type
+            <seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType"/>
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType">
+            <summary>
+            Property request types
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.None">
+            <summary>
+            No properties requested
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.NamedProperties">
+            <summary>
+            Specific properties requested
+            <seealso cref="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceFindBase.RequestProperties"/>
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.PropertyNames">
+            <summary>
+            A summary of all the available properties
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropFindBase.PropertyRequestType.AllProperties">
+            <summary>
+            All properties requested
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase">
+            <summary>
+            Dav Resource Delete Framework Base Class
+            </summary>
+            <remarks>
+            	RFC2518 Compliant
+            	
+            	<code>
+            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
+            		http://www.webdav.org/specs/rfc2518.html#METHOD_DELETE
+            	</code>
+            	
+            	<code>
+            		Returns DavDeleteResponseCode.NoContent when successful
+            	</code>
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>	
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.#ctor">
+            <summary>
+            Dav Resource Delete Framework Base Class
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteBase_ValidateDavRequest(System.Object,System.EventArgs)">
+            <summary>
+            Ensure the Dav request is valid
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ClearProcessErrors">
+            <summary>
+            Clear the current processing errors
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.AddProcessErrorResource(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Enum)">
+            <summary>
+            Add a resource to the error list
+            </summary>
+            <param name="resource"></param>
+            <param name="errorCode"></param>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ProcessErrors">
+            <summary>
+            Processing errors 
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.ProcessErrorResources">
+            <summary>
+            Retrieve all the process errors
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode">
+            <summary>
+            WebDav DELETE Response Codes
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.None">
             <summary>
             0: None
             </summary>
@@ -2015,276 +2361,26 @@
             	Default enumerator value
             </remarks>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Created">
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.Processing">
             <summary>
-            201: Created
+            102: Processing
+            </summary>
+        </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.NoContent">
+            <summary>
+            204: NoContent
             </summary>
             <remarks>
-            	The source resource was successfully moved, and a new resource was created 
-            	at the destination.
+            	The delete command completed successfully
             </remarks>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.NoContent">
-            <summary>
-            204: No Content
-            </summary>
-            <remarks>
-            	The source resource was successfully moved to a pre-existing destination resource.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Forbidden">
-            <summary>
-            403: Forbidden
-            </summary>
-            <remarks>
-            	The source and destination URIs are the same
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Conflict">
-            <summary>
-            409: Conflict
-            </summary>
-            <remarks>
-            	A resource cannot be created at the destination until one or more intermediate 
-            	collections have been created
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.PreconditionFailed">
-            <summary>
-            412: Precondition Failed
-            </summary>
-            <remarks>
-            	The server was unable to maintain the liveness of the properties listed in 
-            	the propertybehavior XML element or the Overwrite header is "F" and the state 
-            	of the destination resource is non-null.
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.Locked">
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavDeleteBase.DavDeleteResponseCode.Locked">
             <summary>
             423: Locked
             </summary>
             <remarks>
-            	The source or the destination resource was locked.
+            	The resource is locked
             </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMoveBase.DavMoveResponseCode.BadGateway">
-            <summary>
-            502: Bad Gateway
-            </summary>
-            <remarks>
-            	This may occur when the destination is on another server 
-            	and the destination server refuses to accept the resource.
-            </remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase">
-            <summary>
-            Dav Resource Get Framework Base Class
-            </summary>
-            <remarks>
-            	RFC2518 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#rfc.section.8.4
-            		
-            	- If the requested resource does not exist the method MUST fail with:
-            		
-            				base.AbortRequest(ServerResponseCode.NotFound)
-            	</code>
-            	
-            	<code>
-            		Returns DavGetResponseCode.Created when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>	
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.#ctor">
-            <summary>
-            Dav Resource Get Framework Base Class
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ContentType">
-            <summary>
-            Output response content type
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseCache">
-            <summary>
-            Output response cacheability.
-            </summary>
-            <remarks>HttpCacheability.NoCache by default</remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseCacheExpiration">
-            <summary>
-            Output response cache expiration
-            </summary>
-            <remarks>No expiration by default</remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.ResponseOutput">
-            <summary>
-            Resource output response
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode">
-            <summary>
-            WebDav GET Response Codes
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode.None">
-            <summary>
-            0: None
-            </summary>
-            <remarks>
-            	Default enumerator value
-            </remarks>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.DavGetResponseCode.Created">
-            <summary>
-            201: Created
-            </summary>
-            <remarks>
-            	The resource was sent 
-            </remarks>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection">
-            <summary>
-            WebDav Property Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.#ctor">
-            <summary>
-            WebDav Property Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Remove(System.String)">
-            <summary>
-            Removes a property from the collection by name
-            </summary>
-            <param name="propertyName"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.GetPropertyNames">
-            <summary>
-            Retrieve all the available collection property names
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Copy(Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection)">
-            <summary>
-            Copy an existing property collection
-            </summary>
-            <param name="propertyCollection"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Clone">
-            <summary>
-            DavPropertyAttribute Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavPropertyCollection.Item(System.String)">
-            <summary>
-            Retrieve a property by name
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.WebDavException">
-            <summary>
-            WebDav Server Framework Exception.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor">
-            <summary>
-            WebDav Server Framework Exception.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.String)">
-            <summary>
-            WebDav Server Framework Exception.
-            </summary>
-            <param name="message"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.String,System.Exception)">
-            <summary>
-            WebDav Server Framework Exception.
-            </summary>
-            <param name="message"></param>
-            <param name="innerException"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.WebDavException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
-            <summary>
-            WebDav Server Framework Exception.
-            </summary>
-            <param name="info"></param>
-            <param name="context"></param>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavResourceCollection">
-            <summary>
-            WebDav Resource Collection.
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavResourceCollection.#ctor">
-            <summary>
-            WebDav Lock Property Collection.
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs">
-            <summary>
-            WebDav Lock Refresh event arguments
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.#ctor(System.String,System.Int32)">
-            <summary>
-            WebDav Lock Refresh event arguments
-            </summary>
-            <param name="lockToken"></param>
-            <param name="lockTimeout"></param>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.Clone">
-            <summary>
-            DavRefreshEventArgs Clone
-            </summary>
-            <remarks>Deep copy</remarks>
-            <returns></returns>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.LockToken">
-            <summary>
-            Argument Lock Token
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavRefreshEventArgs.LockTimeout">
-            <summary>
-            Argument Lock Timeout
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavVersionControlBase">
-            <summary>
-            Dav Version Control Framework Base Class
-            </summary>
-            <remarks>
-            	RFC3253 Compliant
-            	
-            	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC3253
-            		http://www.webdav.org/specs/rfc3253.html#METHOD_VERSION-CONTROL
-            		
-            	-	If a request body is included, it MUST be a DAV:version-control XML element.
-            	
-            	- If a response body for a successful request is included, it MUST be a 
-            		DAV:version-control-response XML element.
-            	
-            	NOTE: There is no way to undo a VERSION-CONTROL command.
-            	</code>
-            	
-            	<code>
-            		Returns ServerResponseCode.Ok when successful
-            	</code>
-            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
-            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
-            </remarks>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavVersionControlBase.#ctor">
-            <summary>
-            Dav Version Control Framework Base Class
-            </summary>
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.WebDAVModule">
             <summary>
@@ -2425,167 +2521,179 @@
             DAV Module Digest Authorization handler delegate
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Linq.IEnumerableExtensions">
+        <member name="T:Sphorium.WebDAV.Server.Framework.Resources.DavFolder">
             <summary>
-            IEnumerable Extensions
+            Dav Folder Resource Framework Base Class
             </summary>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Linq.IEnumerableExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+        <member name="M:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.#ctor(System.String,System.String)">
             <summary>
-            Performs the specified action on each element of the <![CDATA[IEnumerable<T>]]>.
+            Initializes a new instance of the DavFolder class
             </summary>
-            <typeparam name="T"></typeparam>
-            <param name="source"></param>
-            <param name="action">The <![CDATA[System.Action<T>]]> delegate to perform on each element of the <![CDATA[IEnumerable<T>]]>.</param>
-            <returns>source</returns>
+            <param name="displayName">Resource display name</param>
+            <param name="folderPath">Resource path</param>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection">
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.ContentType">
             <summary>
-            Summary description for ProcessErrorCollection.
+            Dav Folder Content Type
             </summary>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.Add(Sphorium.WebDAV.Server.Framework.BaseClasses.DavResourceBase,System.Enum)">
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.ResourceType">
             <summary>
-            Add a resource
-            </summary>
-            <param name="resource"></param>
-            <param name="errorCode"></param>
-            <exception cref="T:Sphorium.WebDAV.Server.Framework.WebDavException">Throw exception if the errorCode value is not a valid Int32</exception>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.Item(System.Enum)">
-            <summary>
-            Retrieve all the resources with a particular errorCode
-            </summary>
-            <exception cref="T:Sphorium.WebDAV.Server.Framework.WebDavException">Throw exception if the errorCode value is not a valid Int32</exception>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Collections.DavProcessErrorCollection.AllResourceErrors">
-            <summary>
-            Retrieve all the resource errors
+            Dav Resource Type
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase">
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsCollection">
             <summary>
-            Dav Server OPTIONS Framework Base Class
+            Gets the collection type
+            </summary>
+            <remarks>Will always return 1</remarks>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsHidden">
+            <summary>
+            Gets or sets the IsHidden
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.IsFolder">
+            <summary>
+            Gets the IsFolder property
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Resources.DavFolder.FolderPath">
+            <summary>
+            Gets DavFolder Path
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.Classes.DavProperty">
+            <summary>
+            WebDav Property.
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase">
+            <summary>
+            WebDav Property Base Class.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.#ctor">
+            <summary>
+            WebDav Property Base Class.
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Namespace">
+            <summary>
+            Namespace
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavPropertyBase.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor">
+            <summary>
+            WebDav Property.
+            </summary>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.Xml.XPath.XPathNavigator)">
+            <summary>
+            WebDav Property.
+            </summary>
+            <param name="property"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.String,System.String,System.String)">
+            <summary>
+            WebDav Property.
+            </summary>
+            <param name="propertyName"></param>
+            <param name="propertyValue"></param>
+            <param name="propertyNamespace"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.#ctor(System.String,System.String)">
+            <summary>
+            WebDav Property
+            </summary>
+            <param name="propertyName"></param>
+            <param name="propertyNamespace"></param>
+        </member>
+        <member name="M:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.Clone">
+            <summary>
+            DavProperty Clone
+            </summary>
+            <remarks>Deep copy</remarks>
+            <returns></returns>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.NestedProperties">
+            <summary>
+            Nested Dav Properties
+            </summary>
+        </member>
+        <member name="P:Sphorium.WebDAV.Server.Framework.Classes.DavProperty.Attributes">
+            <summary>
+            Nested Dav Properties
+            </summary>
+        </member>
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase">
+            <summary>
+            Dav Version Report Framework Base Class
             </summary>
             <remarks>
-            	RFC2518 Compliant / RFC3253 Compliant
+            	RFC3253 Compliant
             	
             	<code>
-            	The ProcessDavRequest event must follow the following rules addressed in RFC2518
-            		http://www.webdav.org/specs/rfc2518.html#dav.compliance.classes
-            		http://www.webdav.org/specs/rfc3253.html#rfc.section.3.9	
-            		
-            	Class 1:
-            		Class 1 compliant resources MUST return, at minimum, the value "1" in the Dav header 
-            		on all responses to the OPTIONS method.
-            	Class 2: 
-            		Class 2 compliant resources MUST meet all class 1 requirements and support the LOCK 
-            		method, the supportedlock property, the lockdiscovery property, the Time-Out response 
-            		header and the Lock-Token request header. A class "2" compliant resource SHOULD also 
-            		support the Time-Out request header and the owner XML element.
-            		
-            		Class 2 compliant resources MUST return, at minimum, the values "1" and "2" in the 
-            		Dav header on all responses to the OPTIONS method.
+            	The ProcessDavRequest event must follow the following rules addressed in RFC3253
+            		http://www.webdav.org/specs/rfc3253.html#METHOD_REPORT
+            	
+            	
+            	//TODO: update this	
+            	-	If a request body is included, it MUST be a DAV:version-control XML element.
+            	
+            	- If a response body for a successful request is included, it MUST be a 
+            		DAV:version-control-response XML element.
+            	
+            	NOTE: There is no way to undo a VERSION-CONTROL command.
             	</code>
             	
             	<code>
-            		Returns ServerResponseCode.OK when successful
+            		Returns ServerResponseCode.Ok when successful
             	</code>
-            </remarks>	
+            	<seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode"/>
+            	<seealso cref="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.AbortRequest(System.Enum)"/>
+            </remarks>
         </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.#ctor">
+        <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.#ctor">
             <summary>
-            Dav Server OPTIONS Framework Base Class
+            Dav Version Control Framework Base Class
             </summary>
         </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.SupportedHttpMethods">
+        <member name="P:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.RequestVersionReportType">
             <summary>
-            WebDav Server Supported Http Methods
+            Requested Version report type
+            <seealso cref="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType"/>
             </summary>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods">
+        <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType">
             <summary>
-            WebDav HttpMethods
+            Property request types
             </summary>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.None">
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.None">
             <summary>
-            No supported methods
+            No report requested
             </summary>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Options">
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.VersionTree">
             <summary>
-            Supports OPTIONS Method
+            Specific properties requested
             </summary>
         </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Get">
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavReportBase.VersionReportType.ExpandProperty">
             <summary>
-            Supports GET Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Head">
-            <summary>
-            Supports HEAD Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Delete">
-            <summary>
-            Supports DELETE Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Put">
-            <summary>
-            Supports PUT Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Copy">
-            <summary>
-            Supports COPY Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Move">
-            <summary>
-            Supports MOVE Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.MKCol">
-            <summary>
-            Supports MKCOL Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.PropFind">
-            <summary>
-            Supports PROPFIND Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.PropPatch">
-            <summary>
-            Supports PROPPATCH Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Lock">
-            <summary>
-            Supports LOCK Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Unlock">
-            <summary>
-            Supports UNLOCK Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.VersionControl">
-            <summary>
-            Supports VERSION-CONTROL Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.Report">
-            <summary>
-            Supports REPORT Method
-            </summary>
-        </member>
-        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavOptionsBase.HttpMethods.All">
-            <summary>
-            Supports All Methods
+            A summary of all the available properties
             </summary>
         </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.BaseClasses.DavLockBase">
@@ -2731,68 +2839,6 @@
             	Implies the action would have succeeded by itself
             </remarks>
         </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs">
-            <summary>
-            Basic Authorization event arguments
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.#ctor(System.String,System.String,System.String)">
-            <summary>
-            Basic Authorization event arguments
-            </summary>
-            <param name="userName"></param>
-            <param name="password"></param>
-            <param name="realm"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.UserName">
-            <summary>
-            User Name
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Password">
-            <summary>
-            Password
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Realm">
-            <summary>
-            Realm
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.BasicAuthorizationArgs.Authorized">
-            <summary>
-            Authorized 
-            </summary>
-            <value>
-            TRUE if the request is authorized
-            </value>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs">
-            <summary>
-            Authentication event arguments
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.#ctor(Sphorium.WebDAV.Server.Framework.Security.AuthenticationArgs)">
-            <summary>
-            Authorization event arguments
-            </summary>
-            <param name="authArgs"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.AuthenticationInfo">
-            <summary>
-            Authentication Info
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.UserName">
-            <summary>
-            UserName
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthorizationArgs.RequestAuthorized">
-            <summary>
-            Request Authorization
-            </summary>
-        </member>
         <member name="T:Sphorium.WebDAV.Server.Framework.Security.Authentication">
             <summary>
             Authentication Type
@@ -2844,52 +2890,6 @@
         <member name="P:Sphorium.WebDAV.Server.Framework.Security.AuthenticationArgs.ProcessAuthorization">
             <summary>
             Process Authorization
-            </summary>
-        </member>
-        <member name="T:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs">
-            <summary>
-            Digest Authorization event arguments
-            </summary>
-        </member>
-        <member name="M:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.#ctor(System.String,System.String)">
-            <summary>
-            Digest Authorization event arguments
-            </summary>
-            <param name="userName"></param>
-            <param name="realm"></param>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.UserName">
-            <summary>
-            User Name
-            </summary>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Password">
-            <summary>
-            Password
-            </summary>
-            <remarks>
-            Required for digest authorization
-            </remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Nonce">
-            <summary>
-            Nonce
-            </summary>
-            <remarks>
-            Update to apply a custom nonce
-            </remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.StaleNonce">
-            <summary>
-            Nonce Is Stale
-            </summary>
-            <remarks>
-            Update to require a new nonce
-            </remarks>
-        </member>
-        <member name="P:Sphorium.WebDAV.Server.Framework.Security.DigestAuthorizationArgs.Realm">
-            <summary>
-            Realm
             </summary>
         </member>
     </members>
