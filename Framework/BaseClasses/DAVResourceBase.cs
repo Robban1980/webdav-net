@@ -189,33 +189,28 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 								switch (_resourceProperty.Name.ToLower(CultureInfo.InvariantCulture))
 								{
 									case "lastmodified":
-										{
-											//DavPropertyAttribute _propertyAttribute = new DavPropertyAttribute();
-											//_propertyAttribute.AttributeName = "dt";
-											//_propertyAttribute.AttributeNamespace = "b";
-											//_propertyAttribute.AttributeValue = "dateTime.rfc1123";
-
-											//_property.Attributes.Add(_propertyAttribute);
-											//_property.Value = _propertyValue.ToString("r", CultureInfo.InvariantCulture);
-
-											//_property.Value = _propertyValue.ToString(CultureInfo.InvariantCulture.DateTimeFormat.RFC1123Pattern, CultureInfo.InvariantCulture);
-
-											_property.Value = _propertyValue.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
-										}
-										break;
-
 									case "creationdate":
-										{
-											//DavPropertyAttribute _propertyAttribute = new DavPropertyAttribute();
-											//_propertyAttribute.AttributeName = "dt";
-											//_propertyAttribute.AttributeNamespace = "b";
-											//_propertyAttribute.AttributeValue = "dateTime.tz";
+										
+										// Older versions of Windows require date to be sent in this now-obsolete 
+										// date format. Dates should also always be sent in rfc1123 format as per the
+										// spec.
+										// http://www.greenbytes.de/tech/webdav/webfolder-client-list.html#issue-date-format
+										// http://lists.xml.org/archives/xml-dev/200101/msg00930.html
+										DavPropertyAttribute propertyAttributeUuid = new DavPropertyAttribute {
+											AttributeNamespace = "xmlns",
+											AttributeName = "b",
+											AttributeValue = "urn:uuid:c2f41010-65b3-11d1-a29f-00aa00c14882/"
+										};
+										DavPropertyAttribute propertyAttributeRfc = new DavPropertyAttribute {
+											AttributeNamespace = "b",
+											AttributeName = "dt",
+											AttributeValue = "dateTime.rfc1123"
+										};
 
-											//_property.Attributes.Add(_propertyAttribute);
-											//_property.Value = this.__creationDate.ToString("s", CultureInfo.InvariantCulture);
-
-											_property.Value = _propertyValue.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'");
-										}
+										_property.Attributes.Add( propertyAttributeUuid );
+										_property.Attributes.Add( propertyAttributeRfc );
+										_property.Value = _propertyValue.ToString( CultureInfo.InvariantCulture.DateTimeFormat.RFC1123Pattern, CultureInfo.InvariantCulture );
+										
 										break;
 								}
 
