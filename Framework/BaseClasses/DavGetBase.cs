@@ -81,11 +81,11 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		{
 			get
 			{
-				return base.HttpApplication.Request.ContentType;
+				return HttpApplication.Response.ContentType;
 			}
 			set
 			{
-				base.HttpApplication.Request.ContentType = value;
+				HttpApplication.Response.ContentType = value;
 			}
 		}
 
