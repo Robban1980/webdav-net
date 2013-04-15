@@ -75,12 +75,12 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 
 			if (ResponseCacheExpiration != DateTime.MinValue)
 				this.HttpApplication.Response.Cache.SetExpires(ResponseCacheExpiration);
-
+		
 			if (this.Resource != null)
 			{
-				base.HttpApplication.Response.Headers["Content-Type"] = this.Resource.ContentType;
-				base.HttpApplication.Response.Headers["Content-Length"] = this.Resource.ContentLength.ToString();
-				base.HttpApplication.Response.Headers["Last-Modified"] = this.Resource.LastModified.ToString("r");
+				HttpApplication.Response.AddHeader( "Content-Type", Resource.ContentType );
+				HttpApplication.Response.AddHeader( "Content-Length", Resource.ContentLength.ToString() );
+				HttpApplication.Response.AddHeader( "Last-Modified", Resource.LastModified.ToString() );
 			}
 
 			return (int)ServerResponseCode.Ok;
