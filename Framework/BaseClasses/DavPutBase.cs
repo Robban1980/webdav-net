@@ -151,8 +151,7 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 
 		private int DavPutBase_InternalProcessDavRequest(object sender, EventArgs e)
 		{
-			//return (int)DavPutResponseCode.Created;
-			return (int)ServerResponseCode.Ok;
+			return (int)DavPutResponseCode.Created;
 		}
 	}
 }
