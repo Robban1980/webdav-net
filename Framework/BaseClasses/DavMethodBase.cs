@@ -253,7 +253,12 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 			/// <summary>
 			/// 501: Method Not Implemented
 			/// </summary>
-			MethodNotImplemented = 501
+			MethodNotImplemented = 501,
+
+			/// <summary>
+			/// 415: Media Type Not Supported
+			/// </summary>
+			MediaTypeNotSupported = 415
 		}
 		#endregion
 

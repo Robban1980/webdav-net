@@ -297,6 +297,11 @@
             501: Method Not Implemented
             </summary>
         </member>
+        <member name="F:Sphorium.WebDAV.Server.Framework.BaseClasses.DavMethodBase.ServerResponseCode.MediaTypeNotSupported">
+            <summary>
+            415: Media Type Not Supported
+            </summary>
+        </member>
         <member name="M:Sphorium.WebDAV.Server.Framework.BaseClasses.DavGetBase.#ctor">
             <summary>
             Dav Resource Get Framework Base Class
