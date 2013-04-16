@@ -103,8 +103,10 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 			{
 				bool _overwriteResource = true;
 
-				if (base.HttpApplication.Request.Headers["Overwrite"] != null)
-					_overwriteResource = !(base.HttpApplication.Request.Headers["Overwrite"] == "f");
+				if ( HttpApplication.Request.Headers["Overwrite"] != null )
+				{
+					_overwriteResource = "f".Equals( HttpApplication.Request.Headers[ "Overwrite" ], StringComparison.InvariantCultureIgnoreCase );
+				}
 
 				return _overwriteResource;
 			}
