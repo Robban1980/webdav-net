@@ -302,11 +302,10 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		{
 			int _responseCode = (int)DavLockResponseCode.Ok;
 
-			string[] _lockTokens = this.RequestLock.GetLockTokens();
-
 			//Check to see if a lock refresh was requested
 			if (base.HttpApplication.Request.Headers["If"] != null)
 			{
+				string[] _lockTokens = this.RequestLock.GetLockTokens();
 				if (_lockTokens.Length == 1)
 				{
 					DavRefreshEventArgs _refreshEventArgs = new DavRefreshEventArgs(_lockTokens[0], this.RequestLock.LockTimeout);
@@ -317,6 +316,7 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 			}
 			else
 			{
+				string[] _lockTokens = this.ResponseLock.GetLockTokens();
 				//New lock request
 				StringBuilder _opaquelockTokens = new StringBuilder();
 				foreach (string _lockToken in _lockTokens)
