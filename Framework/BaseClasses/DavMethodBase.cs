@@ -159,19 +159,21 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 			}
 
 			//Reset all the variables
-			this.SetResponseXml("");
+			this.SetResponseXml(string.Empty);
 			this.__internalStatusCode = (int)ServerResponseCode.Ok;
 			this.__abortStatusCode = (int)ServerResponseCode.Ok;
 			this.__httpResponseCode = (int)ServerResponseCode.Ok;
 			this.FireOnProcessDavRequest = true;
 
-			//Notify the client the server is about to process the dav request
-			this.OnPreProcessDavRequest(EventArgs.Empty);
-
-			if (IsRequestAborted())
+			try
+			{
+				OnPreProcessDavRequest(EventArgs.Empty);
+			} catch (AbortRequest)
+			{
 				InternalFunctions.WriteDebugLog("WebDAV request aborted... abort status code: " + this.__abortStatusCode);
+			}
 
-			else
+			if ( !IsRequestAborted())
 			{
 				//Validate the Dav Request... this will always return ServerResponseCode.OK if successful
 				this.__httpResponseCode = this.OnValidateDavRequest(EventArgs.Empty);
@@ -213,7 +215,7 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		/// <summary>
 		/// WebDav Common Response Codes
 		/// </summary>
-		protected enum ServerResponseCode : int
+		protected enum ServerResponseCode
 		{
 			/// <summary>
 			/// 0: None
@@ -297,10 +299,10 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		/// <summary>
 		/// Aborts the current request processing
 		/// </summary>
-		protected void AbortRequest(System.Enum responseCode)
-		{
+		protected void AbortRequest( System.Enum responseCode )
+ 		{
 			if (responseCode == null)
-				throw new ArgumentNullException("HttpApplication", InternalFunctions.GetResourceString("ArgumentNullException", "ResponseCode"));
+				throw new ArgumentNullException("ResponseCode", InternalFunctions.GetResourceString("ArgumentNullException", "ResponseCode"));
 
 			Type _enumType = responseCode.GetType();
 			if (responseCode.GetTypeCode() == TypeCode.Int32)
@@ -312,14 +314,15 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		/// <summary>
 		/// Aborts the current request processing
 		/// </summary>
-		/// <param name="responseCode">HttpResponse status code</param>
-		protected internal void AbortRequest(int responseCode)
+		protected void AbortRequest(int responseCode)
 		{
-			if (responseCode >= 200 && responseCode < 300)
-				throw new WebDavException(InternalFunctions.GetResourceString("InvalidResponseCode"));
+			if ( responseCode >= 200 && responseCode < 300 )
+				throw new WebDavException( InternalFunctions.GetResourceString( "InvalidResponseCode" ) );
 
 			this.__abortStatusCode = responseCode;
+			throw new AbortRequest( responseCode );
 		}
+
 
 		/// <summary>
 		/// Check to see if the request has been aborted

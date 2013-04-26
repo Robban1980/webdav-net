@@ -175,6 +175,7 @@
     <Compile Include="Framework\BaseClasses\DavVersionControlBase.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Framework\AbortRequest.cs" />
     <Compile Include="Framework\Security\AuthenticationArgs.cs" />
     <Compile Include="Framework\Security\AuthorizationArgs.cs" />
     <Compile Include="Framework\Security\DigestAuthorizationArgs.cs" />
