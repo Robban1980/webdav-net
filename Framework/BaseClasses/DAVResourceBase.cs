@@ -377,7 +377,8 @@ namespace Sphorium.WebDAV.Server.Framework.BaseClasses
 		/// <summary>
 		/// Dav Resource display name
 		/// </summary>
-		public string DisplayName { get; private set; }
+		[ResourcePropertyAttribute("displayname")]
+		public string DisplayName { get; set; }
 
 		/// <summary>
 		/// Dav Resource display name

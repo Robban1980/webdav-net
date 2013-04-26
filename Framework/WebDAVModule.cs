@@ -256,12 +256,9 @@ namespace Sphorium.WebDAV.Server.Framework
 							case Authentication.Basic:
 								//By default the request is not authorized
 								_requestAuthorized = false;
-								if (!string.IsNullOrEmpty(_authStr) && _authStr.StartsWith("Basic"))
+								if ( BasicAuthorizationArgs.IsBasicAuthorizationHeader( _authStr ) )
 								{
-									byte[] _decodedBytes = Convert.FromBase64String(_authStr.Substring(6));
-									string[] _authInfo = System.Text.Encoding.ASCII.GetString(_decodedBytes).Split(':');
-
-									BasicAuthorizationArgs _basicAuthArgs = new BasicAuthorizationArgs(_authInfo[0], _authInfo[1], _authArgs.Realm);
+									BasicAuthorizationArgs _basicAuthArgs = new BasicAuthorizationArgs( _authStr );
 
 									//Set the authorization username
 									_authorizationArgs.UserName = _basicAuthArgs.UserName;

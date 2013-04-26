@@ -5,6 +5,7 @@
 //-----------------------------------------------------------------------
 
 using System;
+using System.Web;
 
 namespace Sphorium.WebDAV.Server.Framework.Security
 {
@@ -13,10 +14,16 @@ namespace Sphorium.WebDAV.Server.Framework.Security
 	/// </summary>
 	public sealed class BasicAuthorizationArgs : EventArgs
 	{
-		private readonly string __realm;
-		private readonly string __userName;
-		private readonly string __password;
-		private bool __authorized = false;
+
+		/// <summary>
+		/// Check if an HttpRequest has headers for basic authentication.
+		/// </summary>
+		/// <param name="header">Request to evaluate</param>
+		/// <returns></returns>
+		public static bool IsBasicAuthorizationHeader( string header )
+		{
+			return header != null && header.StartsWith( "Basic" );
+		}
 
 		/// <summary>
 		/// Basic Authorization event arguments
@@ -26,43 +33,39 @@ namespace Sphorium.WebDAV.Server.Framework.Security
 		/// <param name="realm"></param>
 		public BasicAuthorizationArgs(string userName, string password, string realm)
 		{
-			this.__userName = userName;
-			this.__password = password;
-			this.__realm = realm;
+			UserName = userName;
+			Password = password;
+			Realm = realm;
+		}
+
+		/// <summary>
+		/// Create Basic Authorization arguments given an HttpRequest
+		/// </summary>
+		/// <param name="header"></param>
+		public BasicAuthorizationArgs( string header )
+		{
+			var decodedBytes = Convert.FromBase64String( header.Substring( 6 ) );
+			var authInfo = System.Text.Encoding.ASCII.GetString( decodedBytes ).Split( ':' );
+
+			UserName = authInfo[ 0 ];
+			Password = authInfo[ 1 ];
+			Realm = string.Empty;
 		}
 
 		/// <summary>
 		/// User Name
 		/// </summary>
-		public string UserName
-		{
-			get
-			{
-				return this.__userName;
-			}
-		}
+		public string UserName { get; private set; }
 
 		/// <summary>
 		/// Password
 		/// </summary>
-		public string Password
-		{
-			get
-			{
-				return this.__password;
-			}
-		}
+		public string Password { get; private set; }
 
 		/// <summary>
 		/// Realm
 		/// </summary>
-		public string Realm
-		{
-			get
-			{
-				return this.__realm;
-			}
-		}
+		public string Realm { get; private set; }
 
 		/// <summary>
 		/// Authorized 
@@ -72,14 +75,8 @@ namespace Sphorium.WebDAV.Server.Framework.Security
 		/// </value>
 		public bool Authorized
 		{
-			get
-			{
-				return this.__authorized;
-			}
-			set
-			{
-				this.__authorized = value;
-			}
+			get;
+			set ;
 		}
 	}
 }
